@@ -85,7 +85,7 @@ textarea
 
 {
     
-    width: 300px;
+    width: fit-content;
     max-height: 500px;
     height: fit-content;
     min-height: 376px;
@@ -129,29 +129,47 @@ p{
     border-radius: 6px;
     width: 100%;
     font-weight:500;
-    font-size:15px;
-    margin:0;
+    font-size:18px;
+    margin:0px 10px 0px 0px;
     
 }
 
+.complete_button, .delete_button, .save_button, .edit_button{
 
-.delete_button{
-    margin: 15px 0px 0px;
+    margin: 5px;
+    width:65px;
     height: 30px;
     font-size: 14px;
-    padding: 8px;
+    padding: 5px;
+    text-decoration: none;
+    align-self: center;
+
 }
 
 
-.each_item{
+.each_item_uncompleted{
 
     background-color: #F2EAF7;
     margin: 20px 15px 0px 15px;
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 5px 5px rgba(169,188,218,.65);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
+.each_item_completed{
+
+    background-color:#b5f7c2;
+    margin: 20px 15px 0px 15px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 5px 5px rgba(169,188,218,.65);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 
 @media screen  and (max-width: 720px){
     
