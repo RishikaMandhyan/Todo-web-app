@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <link rel="stylesheet" href="home.css">
     <title>Todo</title>
 </head>
@@ -12,15 +13,53 @@
         <h2>Todo Web Application</h2>
         <div class="input_container1">
             <div class="input_container2">
-                 <textarea type="text" placeholder="Enter your todo here" id="userinput"></textarea>
-                 <button id="submit_button">Submit</button>
+                <textarea type="text" placeholder="Enter your todo here" id="userinput"></textarea>
+                <div>
+                    <div class="subtask_input_container">
+                        <input type="text" id="subtask_input" placeholder="Enter your subtask here">
+                        <span class="material-symbols-outlined" id="plus_button">
+                            add
+                        </span>
+                    </div>
+                    <div id="subtask_list_container"></div>
+                </div>
+
+
+
+                <div id="duedate_list">
+                    
+                        <button class="duedate_item" id="today">Today</button>
+                        <button class="duedate_item" id="tmrw">Tomorrow</button>
+                        <button class="duedate_item" id="custom">Custom</button>
+                        <input type="date" class="date_picker" id="date">
+
+                 
+                </div>
+                <div id="priority_list">
+                        <button class="priority_item" id="high">High</button>
+                        <button class="priority_item" id="medium">Medium</button>
+                        <button class="priority_item" id="low">Low</button>
+                </div>
+
+                <button id="submit_button">Submit</button>
+
             </div>
             <div class="list_container" id="list_container">
-                <h4>Your tasks</h4>
+                <div class="list_header">
+                    <h4>Your tasks</h4>
+                    <div class="search_container">
+                        <input type="text" placeholder="Search" id="search_input">
+                        <span id="search_button" class="material-symbols-outlined">
+                            search
+                        </span>
+                        <span id="cancel_search_button" class="material-symbols-outlined">
+                        close
+                        </span>
+                    </div>
+                </div>
                 <div id="list_container2" ></div>
             </div>
         </div>
-        
     </div>
     
 
