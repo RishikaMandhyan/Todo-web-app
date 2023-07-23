@@ -17,17 +17,27 @@
                 <div>
                     <div class="subtask_input_container">
                         <input type="text" id="subtask_input" placeholder="Enter your subtask here">
-                        <span class="material-symbols-outlined" id="plus_button">
+                        <span class="material-symbols-outlined" id="plus_button_subtask">
                             add
                         </span>
                     </div>
                     <div id="subtask_list_container"></div>
                 </div>
+                <div>
+                    <div class="category_input_container">
+                        <input type="text" id="category_input" placeholder="Enter task category">
+                        <span class="material-symbols-outlined" id="plus_button_category">
+                            add
+                        </span>
+                    </div>
+                    <div id="category_list_container"></div>
+                </div>
 
 
 
                 <div id="duedate_list">
-                    
+                         
+                        <p style="text-align: center;">Duedate</p>
                         <button class="duedate_item" id="today">Today</button>
                         <button class="duedate_item" id="tmrw">Tomorrow</button>
                         <button class="duedate_item" id="custom">Custom</button>
@@ -36,6 +46,7 @@
                  
                 </div>
                 <div id="priority_list">
+                        <p style="text-align: center;">Priority</p>
                         <button class="priority_item" id="high">High</button>
                         <button class="priority_item" id="medium">Medium</button>
                         <button class="priority_item" id="low">Low</button>
@@ -48,16 +59,48 @@
                 <div class="list_header">
                     <h4>Your tasks</h4>
                     <div class="search_container">
-                        <input type="text" placeholder="Search" id="search_input">
-                        <span id="search_button" class="material-symbols-outlined">
+                        <input type="text" placeholder="Search by task title" id="search_input">
+
+                        <div>
+                            <span id="search_button_1" class="material-symbols-outlined">
                             search
                         </span>
-                        <span id="cancel_search_button" class="material-symbols-outlined">
+                        <span id="cancel_search_button_1" class="material-symbols-outlined">
                         close
                         </span>
+                       </div>
+                        
                     </div>
                 </div>
                 <div id="list_container2" ></div>
+
+                <div class="footer" id="footer">
+                    <div class="filter_container">
+                        <input type="text" placeholder="Filter by Category" id="search_input_2">
+                        <div>
+                            <span id="search_button_2" class="material-symbols-outlined">
+                                search
+                            </span>
+                            <span id="cancel_search_button_2" class="material-symbols-outlined">
+                            close
+                            </span>
+                        </div>
+                        
+                    </div>
+
+                    <div class="filter_container">
+                        <input type="text" placeholder="Filter by Priority" id="search_input_3">
+                        <div>
+                            <span id="search_button_3" class="material-symbols-outlined">
+                                search
+                            </span>
+                            <span id="cancel_search_button_3" class="material-symbols-outlined">
+                            close
+                            </span>
+                        </div>
+                        
+                    </div>
+                </div>
             </div>
         </div>
     </div>

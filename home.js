@@ -1,10 +1,11 @@
 //this web application fetches data for todos from an api and also provides an option to add/delete our own todos
 //import moment from './node_modules/moment/src/moment';
 
-var unique_id, subtask_uid=1;
+var unique_id, subtask_uid=1, category_uid=1;
 var priority="none";
 var duedate="none";
 var subtask_arr=new Array(0);
+var category_arr=new Array(0);
 var todo_string= localStorage.getItem('todos');
 var todo_list=JSON.parse(todo_string);
 if(todo_list==null || todo_list.length==0) 
@@ -12,14 +13,19 @@ if(todo_list==null || todo_list.length==0)
   //console.log("hi");
   unique_id=1;
   subtask_uid=1;
+  category_uid=1;
   todo_list=new Array(0);
 }
 else unique_id=todo_list[todo_list.length-1].id +1;
 
 
 var submit_button= document.getElementById("submit_button");
-var search_button= document.getElementById("search_button");
-var cancel_search_button= document.getElementById("cancel_search_button");
+var search_button_1= document.getElementById("search_button_1");
+var cancel_search_button_1= document.getElementById("cancel_search_button_1");
+var search_button_2= document.getElementById("search_button_2");
+var cancel_search_button_2= document.getElementById("cancel_search_button_2");
+var search_button_3= document.getElementById("search_button_3");
+var cancel_search_button_3= document.getElementById("cancel_search_button_3");
 var list_container= document.getElementById("list_container2");
 render_list();
 
@@ -56,6 +62,8 @@ function render_list()
         var para=document.createElement("p");
         var date_para=document.createElement("p");
         var subtask_div=document.createElement("div");
+        var category_div=document.createElement("div");
+        var button_container=document.createElement("div");
         var delete_button=document.createElement("button");
         var edit_button=document.createElement("button");
         var save_button=document.createElement("button");
@@ -65,18 +73,29 @@ function render_list()
         para.innerText=item.title;
         para.setAttribute("id", "p"+item.id);
 
+        button_container.setAttribute("class", "button_container");
+
         edit_button.setAttribute("onclick", "edit_function("+ item.id+")");
         edit_button.setAttribute("class", "edit_button");
-        edit_button.innerText= "Edit";
+        edit_button.innerHTML=`<span class="material-symbols-outlined" id="ed_button">
+        edit
+        </span>`;
 
         save_button.setAttribute("onclick", "save_function("+ item.id+")");
         save_button.setAttribute("class", "save_button");
         save_button.style.display="none";
-        save_button.innerText= "Save";
+        
+        save_button.innerHTML=`<span class="material-symbols-outlined" id="save_button">
+        save_as
+        </span>`;
 
         complete_button.setAttribute("onclick", "complete_function("+ item.id+")");
         complete_button.setAttribute("class", "complete_button");
-        complete_button.innerText= "Done";
+        
+        complete_button.innerHTML=`<span class="material-symbols-outlined" id="done_button">
+        done
+        </span>`;
+        
 
         if(item.saved)
         {
@@ -146,28 +165,43 @@ function render_list()
        
         item.subtask_arr.map(function(s_item)
         {
-            var s_para=document.createElement("p");
+            var s_para=document.createElement("li");
             s_para.innerText=s_item.title;
             s_para.setAttribute("id", s_item.s_id);
             //console.log(item.subtask_arr);
+            subtask_div.appendChild(s_para);
+
+        })
+
+        item.category_arr.map(function(c_item)
+        {
+            var c_para=document.createElement("p");
+            c_para.innerText="Category: "+c_item.title;
+            c_para.setAttribute("id", c_item.c_id);
+            //console.log(item.subtask_arr);
+            category_div.appendChild(c_para);
 
         })
         
 
       //console.log("hi");
-      
-
-
         delete_button.setAttribute("class", "delete_button");
-        delete_button.innerText= "Delete";
+        delete_button.innerHTML=`<span class="material-symbols-outlined" id="del_button">
+        delete
+        </span>`;
         delete_button.setAttribute("onclick", "delete_function("+ item.id+")");
 
         new_div.appendChild(para);
+        new_div.appendChild(category_div);
         new_div.appendChild(date_para);
-        new_div.appendChild(delete_button);
-        new_div.appendChild(edit_button);
-        new_div.appendChild(save_button);
-        new_div.appendChild(complete_button);
+        new_div.appendChild(subtask_div);
+
+        button_container.appendChild(delete_button);
+        button_container.appendChild(edit_button);
+        button_container.appendChild(save_button);
+        button_container.appendChild(complete_button);
+
+        new_div.appendChild(button_container);
         list_container.appendChild(new_div);
 
       }
@@ -261,7 +295,8 @@ submit_button.addEventListener("click", function(){
             display: true,
             priority: priority,
             duedate: duedate,
-            subtask_arr: [...subtask_arr]
+            subtask_arr: [...subtask_arr],
+            category_arr: [...category_arr]
         }
 
         todo_list.push(new_entry);
@@ -273,8 +308,12 @@ submit_button.addEventListener("click", function(){
         priority= "none";
         duedate="none";
         while(subtask_arr.length) {subtask_arr.pop();}
+        while(category_arr.length) {category_arr.pop();}
+
         document.getElementById("subtask_list_container").textContent='';
+        document.getElementById("category_list_container").textContent='';
         console.log(subtask_arr);
+        console.log(category_arr);
         document.getElementById("date").style.display="none";
         document.getElementById("high").style.backgroundColor="blueviolet";
         document.getElementById("medium").style.backgroundColor="blueviolet";
@@ -289,7 +328,7 @@ submit_button.addEventListener("click", function(){
 
 //partial keyword search
 //it returns the todo if the todo title contains any of the keywords mentioned by the user
-search_button.addEventListener('click', function()
+search_button_1.addEventListener('click', function()
 {
   var search_input= document.getElementById("search_input").value;
   var search_keywords=search_input.toLowerCase().split(' ');
@@ -306,7 +345,6 @@ search_button.addEventListener('click', function()
     if(counter==0) item.display=false;
   })
 
-  // localStorage.setItem('todos', JSON.stringify(todo_list));  
   render_list();
 
   todo_list.map(function(item)
@@ -316,7 +354,7 @@ search_button.addEventListener('click', function()
 
 })
 
-cancel_search_button.addEventListener('click', function()
+cancel_search_button_1.addEventListener('click', function()
 {
   document.getElementById("search_input").value='';
   render_list();
@@ -408,26 +446,175 @@ document.getElementById("date").addEventListener('change', function(event){
 
 
 //functionality of entering subtasks when plus button is clicked
-document.getElementById("plus_button").addEventListener("click", function()
+document.getElementById("plus_button_subtask").addEventListener("click", function()
 {
   
     var parent_div= document.getElementById("subtask_list_container");
     var subtask= document.getElementById("subtask_input").value;
-    console.log(subtask);
-    var new_p= document.createElement("p");
-    new_p.innerText=subtask;
-    new_p.setAttribute("class","subtask_para");
-    parent_div.appendChild(new_p);
 
-    var new_entry=
+
+    if(subtask.length>0)
     {
-        title: subtask,
-        s_id: subtask_uid,
+      console.log(subtask);
+      var new_p= document.createElement("p");
+      new_p.innerText=subtask;
+      new_p.setAttribute("class","subtask_para");
+      parent_div.appendChild(new_p);
+  
+      var new_entry=
+      {
+          title: subtask,
+          s_id: subtask_uid,
+      }
+  
+      subtask_arr.push(new_entry);
+      document.getElementById("subtask_input").value='';
+     // console.log(subtask_arr);
+      subtask_uid++;
     }
 
-    subtask_arr.push(new_entry);
-    document.getElementById("subtask_input").value='';
-   // console.log(subtask_arr);
-    subtask_uid++;
+    else alert("Subtask cannot be empty");
+    
 
+})
+
+
+//adding category
+document.getElementById("plus_button_category").addEventListener("click", function()
+{
+  
+    var parent_div= document.getElementById("category_list_container");
+    var category= document.getElementById("category_input").value;
+
+    if(category.length>0 && category_arr.length<1)
+    {
+      console.log(category);
+      var new_p= document.createElement("p");
+      new_p.innerText=category;
+      new_p.setAttribute("class","category_para");
+      parent_div.appendChild(new_p);
+  
+      var new_entry=
+      {
+          title: category,
+          c_id: category_uid,
+      }
+  
+      category_arr.push(new_entry);
+     // console.log(subtask_arr);
+      category_uid++;
+  
+    }
+
+    else 
+    {
+      if(category.length<1)  alert("Category cannot be empty");
+      else if(category_arr.length>=1)  alert("Task can have only one category");
+    }
+
+    
+    document.getElementById("category_input").value='';
+   
+})
+
+
+
+
+//category filter
+//it returns the todo if the todo category contains any of the categories mentioned by the user
+search_button_2.addEventListener('click', function()
+{
+
+  var search_input= document.getElementById("search_input_2").value;
+
+  if(search_input.length>0)
+  {
+    var search_keywords=search_input.toLowerCase().split(' ');
+    console.log(search_keywords);
+  
+    todo_list.map(function(item)
+    {
+
+      var counter=0;
+      if(item.category_arr.length>0)
+      {    
+
+        
+        search_keywords.map(function(item2)
+        {
+    
+          var x_arr= item.category_arr;
+          console.log(x_arr);
+          if(x_arr[0].title.toLowerCase().includes(item2))
+          {
+              counter++;
+          }
+        })
+        
+
+      }
+
+      if(counter==0 ) item.display=false;
+    
+    })
+  
+    render_list();
+  
+    todo_list.map(function(item)
+    {
+      item.display=true;
+    })
+  }
+  
+
+})
+
+cancel_search_button_2.addEventListener('click', function()
+{
+  document.getElementById("search_input_2").value='';
+  render_list();
+})
+
+
+
+//priority filter
+//it returns the todo if the todo filter contains any of the priorities mentioned by the user
+search_button_3.addEventListener('click', function()
+{
+
+  var search_input= document.getElementById("search_input_3").value;
+
+  if(search_input.length>0)
+  {
+    var search_keywords=search_input.toLowerCase().split(' ');
+    console.log(search_keywords);
+  
+    todo_list.map(function(item){
+    var counter=0;
+      search_keywords.map(function(item2)
+      {
+        if(item.priority.toLowerCase()==item2)
+        {
+             counter++;
+        }
+      })
+
+      if(counter==0) item.display=false;
+    })
+  
+    render_list();
+  
+    todo_list.map(function(item)
+    {
+      item.display=true;
+    })
+  }
+  
+
+})
+
+cancel_search_button_3.addEventListener('click', function()
+{
+  document.getElementById("search_input_3").value='';
+  render_list();
 })
