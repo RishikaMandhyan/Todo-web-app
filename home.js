@@ -3,14 +3,13 @@
 
 var unique_id, subtask_uid=1, category_uid=1;
 var priority="none";
-var duedate="none";
+var duedate= "new Date()";
 var subtask_arr=new Array(0);
 var category_arr=new Array(0);
 var todo_string= localStorage.getItem('todos');
 var todo_list=JSON.parse(todo_string);
 if(todo_list==null || todo_list.length==0) 
 { 
-  //console.log("hi");
   unique_id=1;
   subtask_uid=1;
   category_uid=1;
@@ -26,8 +25,9 @@ var search_button_2= document.getElementById("search_button_2");
 var cancel_search_button_2= document.getElementById("cancel_search_button_2");
 var search_button_3= document.getElementById("search_button_3");
 var cancel_search_button_3= document.getElementById("cancel_search_button_3");
+var cancel_search_button_4= document.getElementById("cancel_search_button_4");
 var list_container= document.getElementById("list_container2");
-render_list();
+render_list(todo_list);
 
 
 //unique id starts from 201 as the data we are fetching from the api already has 200 entries
@@ -51,11 +51,11 @@ render_list();
 //   });
 
 
-function render_list()
+function render_list(x)
 {
     
     list_container.innerHTML='';
-    todo_list.forEach(function(item)
+    x.forEach(function(item)
     {
       if(item.display)
       {
@@ -142,23 +142,26 @@ function render_list()
 
         let today_date= new Date();
         let tmrw= new Date(today_date);
+        let item_date= new Date(item.duedate).toUTCString().slice(5, 16);
         tmrw.setDate(today_date.getDate() + 1);
 
         if(item.duedate!="none")
         {
-          if(item.duedate== today_date.toUTCString().slice(5, 16))
+
+          if(item_date== today_date.toUTCString().slice(5, 16))
           {
             date_para.innerText="Due Today";
           }
   
-          else if(item.duedate== tmrw.toUTCString().slice(5, 16))
+          else if(item_date== tmrw.toUTCString().slice(5, 16))
           {
+            
             date_para.innerText="Due Tomorrow";
           }
 
           else
           {
-            date_para.innerText="Due on "+ item.duedate;
+            date_para.innerText="Due on "+ item_date;
           }
         }
 
@@ -203,7 +206,6 @@ function render_list()
 
         new_div.appendChild(button_container);
         list_container.appendChild(new_div);
-
       }
     });
 
@@ -220,9 +222,8 @@ function complete_function(id)
     todo_list[index].completed=!(todo_list[index].completed);
     localStorage.setItem('todos', JSON.stringify(todo_list));
     var x= list_container.scrollTop;
-    render_list();
+    render_list(todo_list);
     list_container.scrollTop=x;
-
 }
 
 
@@ -232,13 +233,11 @@ function delete_function(button_id)
     {
         return (item.id===button_id);
     })
-
-
     todo_list.splice(index,1);
     localStorage.setItem('todos', JSON.stringify(todo_list));
     console.log(todo_list);
     var x= list_container.scrollTop;
-    render_list();
+    render_list(todo_list);
     list_container.scrollTop=x;
 }
 
@@ -249,11 +248,10 @@ function edit_function(id)
     {
         return (item.id===id);
     })
-
     todo_list[index].editable= true;
     localStorage.setItem('todos', JSON.stringify(todo_list));
     var x= list_container.scrollTop;
-    render_list();
+    render_list(todo_list);
     list_container.scrollTop=x;
 }
 
@@ -264,16 +262,13 @@ function save_function(id)
       {
           return (item.id===id);
       })
-
       todo_list[index].saved= true;
-     
-
       var p_element=document.getElementById("p"+id);
       todo_list[index].title= p_element.innerText;
       todo_list[index].editable=false; 
       localStorage.setItem('todos', JSON.stringify(todo_list));
       var x= list_container.scrollTop;
-      render_list();
+      render_list(todo_list);
       list_container.scrollTop=x;
       
 }
@@ -294,26 +289,26 @@ submit_button.addEventListener("click", function(){
             saved: false,
             display: true,
             priority: priority,
-            duedate: duedate,
+            duedate: new Date(duedate),
             subtask_arr: [...subtask_arr],
             category_arr: [...category_arr]
         }
 
+        //console.log(new_entry.duedate.toUTCString().slice(5, 16));
         todo_list.push(new_entry);
         localStorage.setItem('todos', JSON.stringify(todo_list));  
         document.getElementById("userinput").value='';
-        render_list();
+        render_list(todo_list);
         list_container.scrollTop= -list_container.scrollHeight;
         unique_id++;
         priority= "none";
         duedate="none";
         while(subtask_arr.length) {subtask_arr.pop();}
         while(category_arr.length) {category_arr.pop();}
-
         document.getElementById("subtask_list_container").textContent='';
         document.getElementById("category_list_container").textContent='';
-        console.log(subtask_arr);
-        console.log(category_arr);
+        // console.log(subtask_arr);
+        // console.log(category_arr);
         document.getElementById("date").style.display="none";
         document.getElementById("high").style.backgroundColor="blueviolet";
         document.getElementById("medium").style.backgroundColor="blueviolet";
@@ -321,7 +316,7 @@ submit_button.addEventListener("click", function(){
         document.getElementById("today").style.backgroundColor="blueviolet";
         document.getElementById("tmrw").style.backgroundColor="blueviolet";
         document.getElementById("custom").style.backgroundColor="blueviolet";
-        console.log(todo_list);
+        //console.log(todo_list);
     }
 })
 
@@ -332,32 +327,30 @@ search_button_1.addEventListener('click', function()
 {
   var search_input= document.getElementById("search_input").value;
   var search_keywords=search_input.toLowerCase().split(' ');
-  console.log(search_keywords);
+  //console.log(search_keywords);
 
+  var searched_arr=new Array(0);
   todo_list.map(function(item){
   var counter=0;
     search_keywords.map(function(item2){
       if(item.title.toLowerCase().includes(item2))
       {
-           counter++;
+        counter++;
       }
     })
-    if(counter==0) item.display=false;
+    if(counter>0) searched_arr.push(item);
   })
 
-  render_list();
-
-  todo_list.map(function(item)
-  {
-    item.display=true;
-  })
+  console.log(searched_arr);
+  console.log(todo_list);
+  render_list(searched_arr);
 
 })
 
 cancel_search_button_1.addEventListener('click', function()
 {
   document.getElementById("search_input").value='';
-  render_list();
+  render_list(todo_list);
 })
 
 
@@ -369,21 +362,17 @@ arr.map(function(item){
 
   item.addEventListener("click", function(event)
   {
-
-    for(var i=0;i<arr.length;i++){
-
+    for(var i=0;i<arr.length;i++)
+    {
       if(event.target==arr[i])
       {
         priority=event.target.id;
         event.target.style.backgroundColor="#4F0766";
         console.log(priority);
       }
-
       else arr[i].style.backgroundColor="blueviolet";
     }
-    
   })
-
 })
 
 
@@ -399,10 +388,8 @@ arr2.map(function(item){
     {
       if(event.target==arr2[i])
       {
-        //console.log(event.target.style.backgroundColor);
         if(event.target.style.backgroundColor=="rgb(79, 7, 102)") 
         {
-          //console.log("hi");
           event.target.style.backgroundColor="blueviolet";
           document.getElementById("date").style.display="none";
           duedate="none";
@@ -411,22 +398,21 @@ arr2.map(function(item){
         {
           if(event.target.id=="today")
           {
-            let today_date= new Date().toUTCString().slice(5, 16);
-            duedate=today_date;
-            console.log(duedate);
+            let today_date= new Date();
+            duedate=new Date(today_date);
           }
           else if(event.target.id=="tmrw")
           {
             let today_date= new Date();
             let tmrw= new Date(today_date);
             tmrw.setDate(today_date.getDate() + 1);
-            duedate=tmrw.toUTCString().slice(5, 16);
-            console.log(duedate);
+            duedate=new Date(tmrw);
+           // console.log(duedate.toUTCString().slice(5, 16));
+            
           }
           else if(event.target.id=="custom")
           {
             document.getElementById("date").style.display="block";
-            //console.log("hi");
           }
           event.target.style.backgroundColor="#4F0766";
         }
@@ -439,8 +425,7 @@ arr2.map(function(item){
 
 document.getElementById("date").addEventListener('change', function(event){
   var str=event.target.value;
-  duedate= new Date(str).toUTCString().slice(5, 16);
-  //console.log(duedate);
+  duedate= new Date(str);
 })
 
 
@@ -448,11 +433,8 @@ document.getElementById("date").addEventListener('change', function(event){
 //functionality of entering subtasks when plus button is clicked
 document.getElementById("plus_button_subtask").addEventListener("click", function()
 {
-  
     var parent_div= document.getElementById("subtask_list_container");
     var subtask= document.getElementById("subtask_input").value;
-
-
     if(subtask.length>0)
     {
       console.log(subtask);
@@ -460,22 +442,17 @@ document.getElementById("plus_button_subtask").addEventListener("click", functio
       new_p.innerText=subtask;
       new_p.setAttribute("class","subtask_para");
       parent_div.appendChild(new_p);
-  
       var new_entry=
       {
           title: subtask,
           s_id: subtask_uid,
       }
-  
       subtask_arr.push(new_entry);
       document.getElementById("subtask_input").value='';
      // console.log(subtask_arr);
       subtask_uid++;
     }
-
     else alert("Subtask cannot be empty");
-    
-
 })
 
 
@@ -485,7 +462,6 @@ document.getElementById("plus_button_category").addEventListener("click", functi
   
     var parent_div= document.getElementById("category_list_container");
     var category= document.getElementById("category_input").value;
-
     if(category.length>0 && category_arr.length<1)
     {
       console.log(category);
@@ -493,30 +469,22 @@ document.getElementById("plus_button_category").addEventListener("click", functi
       new_p.innerText=category;
       new_p.setAttribute("class","category_para");
       parent_div.appendChild(new_p);
-  
       var new_entry=
       {
           title: category,
           c_id: category_uid,
       }
-  
       category_arr.push(new_entry);
      // console.log(subtask_arr);
       category_uid++;
-  
     }
-
     else 
     {
       if(category.length<1)  alert("Category cannot be empty");
       else if(category_arr.length>=1)  alert("Task can have only one category");
     }
-
-    
     document.getElementById("category_input").value='';
-   
 })
-
 
 
 
@@ -524,22 +492,17 @@ document.getElementById("plus_button_category").addEventListener("click", functi
 //it returns the todo if the todo category contains any of the categories mentioned by the user
 search_button_2.addEventListener('click', function()
 {
-
   var search_input= document.getElementById("search_input_2").value;
-
   if(search_input.length>0)
   {
     var search_keywords=search_input.toLowerCase().split(' ');
-    console.log(search_keywords);
-  
+    //console.log(search_keywords);
+    var filtered_arr=new Array(0);
     todo_list.map(function(item)
     {
-
       var counter=0;
       if(item.category_arr.length>0)
       {    
-
-        
         search_keywords.map(function(item2)
         {
     
@@ -550,29 +513,17 @@ search_button_2.addEventListener('click', function()
               counter++;
           }
         })
-        
-
       }
-
-      if(counter==0 ) item.display=false;
-    
+      if(counter>0) filtered_arr.push(item);
     })
-  
-    render_list();
-  
-    todo_list.map(function(item)
-    {
-      item.display=true;
-    })
+    render_list(filtered_arr);
   }
-  
-
 })
 
 cancel_search_button_2.addEventListener('click', function()
 {
   document.getElementById("search_input_2").value='';
-  render_list();
+  render_list(todo_list);
 })
 
 
@@ -583,12 +534,10 @@ search_button_3.addEventListener('click', function()
 {
 
   var search_input= document.getElementById("search_input_3").value;
-
   if(search_input.length>0)
   {
     var search_keywords=search_input.toLowerCase().split(' ');
-    console.log(search_keywords);
-  
+    var filtered_arr=new Array(0);
     todo_list.map(function(item){
     var counter=0;
       search_keywords.map(function(item2)
@@ -598,23 +547,89 @@ search_button_3.addEventListener('click', function()
              counter++;
         }
       })
-
-      if(counter==0) item.display=false;
+      if(counter>0) filtered_arr.push(item);
     })
-  
-    render_list();
-  
-    todo_list.map(function(item)
-    {
-      item.display=true;
-    })
+    render_list(filtered_arr);
   }
-  
-
 })
 
 cancel_search_button_3.addEventListener('click', function()
 {
   document.getElementById("search_input_3").value='';
-  render_list();
+  render_list(todo_list);
 })
+
+
+function viewBacklogs()
+{
+  var filtered_arr=new Array();
+  todo_list.map(function(item)
+  {
+     if(item.completed==false && new Date(item.duedate).getTime() < new Date().getTime()){
+      filtered_arr.push(item);
+     }
+  })
+  render_list(filtered_arr);
+}
+
+
+function viewAll()
+{
+   render_list(todo_list);
+}
+
+
+function sortTasks(event){
+  console.log(event.target.value);
+}
+
+function sort_container_click()
+{
+  document.getElementById("sort_list").style.display= "block";
+}
+
+function sortByDuedate(){
+
+  document.getElementById("search_input_4").value="Duedate";
+  document.getElementById("sort_list").style.display= "none";
+  var sorted_arr=[...todo_list];
+  sorted_arr.sort( function compare(a,b)
+  {
+    if(new Date(a.duedate).getTime() > new Date(b.duedate).getTime()){
+     return -1;
+    }
+
+    else return 1;
+  })
+  render_list(sorted_arr);
+}
+
+
+function sortByPriority(){
+  
+  
+  document.getElementById("search_input_4").value="Priority";
+  document.getElementById("sort_list").style.display= "none";
+  var sorted_arr=[...todo_list];
+  sorted_arr.sort( function compare(a,b)
+  {
+
+    if(a.priority==b.priority) return 0; 
+    if(a.priority=="high") return 1;
+    if(a.priority=="none") return -1;
+    if(a.priority=="medium" && b.priority=="high") return -1;
+    if(a.priority=="medium" && (b.priority=="low" || b.priority=="none")) return 1;
+    if(a.priority=="low" && b.priority=="none") return 1;
+    if(a.priority=="low" && (b.priority=="medium" || b.priority=="high")) return -1;
+    
+  })
+  render_list(sorted_arr);
+}
+
+
+cancel_search_button_4.addEventListener('click', function()
+{
+  document.getElementById("search_input_4").value='';
+  render_list(todo_list);
+})
+

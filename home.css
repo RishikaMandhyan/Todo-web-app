@@ -340,6 +340,7 @@ p{
 
 #subtask_list_container, #category_list_container{
     margin-bottom: 15px;
+    border: 1px solid black;
 }
 
 
@@ -351,6 +352,11 @@ p{
     cursor:pointer;
     margin: 10px;
 
+}
+
+.subtask_para{
+
+    padding-top: 7px;
 }
 
 .footer{
@@ -374,6 +380,25 @@ p{
     margin: 5px;
     justify-content: space-between;
 }
+
+#sort_list
+{
+    width: 92%;
+    display: none;
+    box-shadow:  0px 3px 5px rgba(169,188,218,.65);
+
+}
+
+.sort_item{
+    
+    text-align: center;
+    border-radius: 0px;
+}
+.sort_item:hover{
+ 
+    background-color:#f2eeed;
+}
+
 
 
 @media screen  and (max-width: 720px){
