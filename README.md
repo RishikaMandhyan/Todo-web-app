@@ -10,6 +10,10 @@ This todo web application has the following features:
 7. Searching through the task titles using partial keywords
 8. Filtering the tasks using category
 9. Filtering the tasks using priority levels
+10. Sorting by Duedate
+11. Sorting by Priority level
+12. View Missed tasks
+
 
 Remarks: For search and filter features, if user enters a group of keywords seperated by spaces, the app displays all tasks that include one or more of the keywords as a substring.
 
