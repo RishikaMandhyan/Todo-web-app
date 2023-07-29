@@ -29,28 +29,6 @@ var cancel_search_button_4= document.getElementById("cancel_search_button_4");
 var list_container= document.getElementById("list_container2");
 render_list(todo_list);
 
-
-//unique id starts from 201 as the data we are fetching from the api already has 200 entries
-// fetch('https://jsonplaceholder.typicode.com/todos')
-//   .then((response) => 
-//   {
-//     if (!response.ok) 
-//     {
-//       throw new Error('Network response was not OK');
-//     }
-//     return response.json();
-//   })
-//   .then((data) => 
-//   {
-//     todo_list=data;
-//     render_list();
-//   })
-//   .catch(error => 
-//   {
-//     console.log('Error:', error.message);
-//   });
-
-
 function render_list(x)
 {
     
@@ -123,19 +101,19 @@ function render_list(x)
         switch(item.priority)
         {
           case "none":
-          new_div.setAttribute("id", 'gray');
+          new_div.classList.add('gray');
           break;
 
           case "high":
-            new_div.setAttribute("id", "red");
+            new_div.classList.add("red");
           break;
 
           case "medium":
-            new_div.setAttribute("id", "orange");
+            new_div.classList.add("orange");
           break;
 
           case "low":
-            new_div.setAttribute("id", "green");
+            new_div.classList.add("green");
           break;
 
         }
@@ -194,6 +172,9 @@ function render_list(x)
         </span>`;
         delete_button.setAttribute("onclick", "delete_function("+ item.id+")");
 
+        dragItem(new_div);
+        new_div.setAttribute("id", "d"+item.id);
+        new_div.classList.add("dragItem");
         new_div.appendChild(para);
         new_div.appendChild(category_div);
         new_div.appendChild(date_para);
@@ -211,14 +192,110 @@ function render_list(x)
 
 }
 
+function dragItem(new_div)
+{
+  new_div.setAttribute("draggable", "true");
+  new_div.addEventListener("dragstart", dragStart);
+  new_div.addEventListener("dragover", dragOver);
+  new_div.addEventListener("drop", dragDrop);
+  new_div.addEventListener("dragenter", dragEnter);
+  new_div.addEventListener("dragleave", dragLeave);
+  new_div.addEventListener("dragend", dragEnd); 
+}
+
+var fromElement, toElement, fromIndex;
+
+function dragStart(event)
+{
+   fromElement=event.target;
+   fromIndex=todo_list.findIndex(function(item){
+    return ("d"+item.id===event.target.getAttribute("id"));
+  })
+   this.classList.add("dragging");
+   
+}
+function dragEnd(){
+
+  this.classList.remove("dragging");
+}
+
+function dragEnter(){
+   
+  //console.log("enter");
+}
+
+function dragLeave(){
+   
+  //console.log("leave");
+}
+
+function dragOver(e){
+   
+  e.preventDefault();
+    const containerRect = list_container.getBoundingClientRect();
+    const offsetY = e.clientY - containerRect.top;
+    const containerHeight = containerRect.height;
+    const scrollThreshold = 20; 
+    const scrollSpeed = 100; 
+
+    if (offsetY < scrollThreshold) 
+    {
+      list_container.scrollTop -= scrollSpeed;
+    } else if (offsetY > containerHeight - scrollThreshold) 
+    {
+      list_container.scrollTop += scrollSpeed;
+    }
+  
+}
+
+function findAncestorWithClass(element, className) {
+  while ((element = element.parentElement) && !element.classList.contains(className));
+  return element;
+}
+
+
+function dragDrop(e){
+  
+    const containerRect = list_container.getBoundingClientRect();
+    const offsetY = e.clientY - containerRect.top;
+    const items = list_container.querySelectorAll(".dragItem");
+    let dropIndex = 0;
+    for (let i = 0; i < items.length; i++) 
+    {
+      const itemRect = items[i].getBoundingClientRect();
+      const itemMiddleY = itemRect.top - containerRect.top + itemRect.height / 2;
+     
+      if (offsetY > itemMiddleY) 
+      {
+        //console.log(offsetY, itemMiddleY);
+        dropIndex = i + 1;
+      }
+    }
+
+    var parentDiv;
+    if(e.target.classList.contains("dragItem"))
+    {
+      parentDiv=e.target;
+    }
+    else parentDiv=findAncestorWithClass(e.target, "dragItem");
+    //console.log(parentDiv);
+    if(parentDiv)
+    {
+      var removed= todo_list.splice(fromIndex,1);
+      if(fromIndex < dropIndex) dropIndex--;
+      todo_list.splice(dropIndex, 0, removed[0]);
+      console.log(todo_list);
+      localStorage.setItem('todos', JSON.stringify(todo_list));  
+      render_list(todo_list);
+   }
+}
+
 function complete_function(id)
 { 
-
   var index= todo_list.findIndex(function(item)
     {
         return (item.id===id);
     })
-
     todo_list[index].completed=!(todo_list[index].completed);
     localStorage.setItem('todos', JSON.stringify(todo_list));
     var x= list_container.scrollTop;
@@ -294,7 +371,6 @@ submit_button.addEventListener("click", function(){
             category_arr: [...category_arr]
         }
 
-        //console.log(new_entry.duedate.toUTCString().slice(5, 16));
         todo_list.push(new_entry);
         localStorage.setItem('todos', JSON.stringify(todo_list));  
         document.getElementById("userinput").value='';
@@ -307,8 +383,6 @@ submit_button.addEventListener("click", function(){
         while(category_arr.length) {category_arr.pop();}
         document.getElementById("subtask_list_container").textContent='';
         document.getElementById("category_list_container").textContent='';
-        // console.log(subtask_arr);
-        // console.log(category_arr);
         document.getElementById("date").style.display="none";
         document.getElementById("high").style.backgroundColor="blueviolet";
         document.getElementById("medium").style.backgroundColor="blueviolet";
@@ -316,7 +390,6 @@ submit_button.addEventListener("click", function(){
         document.getElementById("today").style.backgroundColor="blueviolet";
         document.getElementById("tmrw").style.backgroundColor="blueviolet";
         document.getElementById("custom").style.backgroundColor="blueviolet";
-        //console.log(todo_list);
     }
 })
 
@@ -449,7 +522,6 @@ document.getElementById("plus_button_subtask").addEventListener("click", functio
       }
       subtask_arr.push(new_entry);
       document.getElementById("subtask_input").value='';
-     // console.log(subtask_arr);
       subtask_uid++;
     }
     else alert("Subtask cannot be empty");
@@ -475,7 +547,6 @@ document.getElementById("plus_button_category").addEventListener("click", functi
           c_id: category_uid,
       }
       category_arr.push(new_entry);
-     // console.log(subtask_arr);
       category_uid++;
     }
     else 
@@ -496,7 +567,6 @@ search_button_2.addEventListener('click', function()
   if(search_input.length>0)
   {
     var search_keywords=search_input.toLowerCase().split(' ');
-    //console.log(search_keywords);
     var filtered_arr=new Array(0);
     todo_list.map(function(item)
     {
@@ -630,6 +700,7 @@ function sortByPriority(){
 cancel_search_button_4.addEventListener('click', function()
 {
   document.getElementById("search_input_4").value='';
+  document.getElementById("sort_list").style.display= "none";
   render_list(todo_list);
 })
 
