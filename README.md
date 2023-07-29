@@ -13,6 +13,7 @@ This todo web application has the following features:
 10. Sorting by Duedate
 11. Sorting by Priority level
 12. View Missed tasks
+13. Drag/drop of tasks
 
 
 Remarks: For search and filter features, if user enters a group of keywords seperated by spaces, the app displays all tasks that include one or more of the keywords as a substring.
