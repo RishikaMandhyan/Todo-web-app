@@ -32,6 +32,15 @@
                     </div>
                     <div id="category_list_container"></div>
                 </div>
+                <div>
+                    <div class="subtask_input_container">
+                        <input type="text" id="tag_input" placeholder="Enter your tag here">
+                        <span class="material-symbols-outlined" id="plus_button_tag">
+                            add
+                        </span>
+                    </div>
+                    <div id="tag_list_container"></div>
+                </div>
                 <div id="duedate_list">
                         <p style="text-align: center;">Duedate</p>
                         <button class="duedate_item" id="today">Today</button>
@@ -45,28 +54,29 @@
                         <button class="priority_item" id="medium">Medium</button>
                         <button class="priority_item" id="low">Low</button>
                 </div>
-                <button class="view_backlogs" onclick="viewBacklogs();">View Missed tasks</button>
-                <button class="view_activity_logs" onclick="viewActivityLogs();">View Activity Logs</button>
-                <button class="view_all_tasks" onclick="viewAll();">View All</button>
+                
                 <button id="submit_button">Submit</button>
+
+                
+
             </div>
             <div class="list_container" id="list_container">
                 <div class="list_header">
                     <h4>Your tasks</h4>
                     <div class="search_container">
-                        <input type="text" placeholder="Search by task title" id="search_input">
+                        <input type="text" placeholder="Search" id="search_input">
                         <div>
                             <span id="search_button_1" class="material-symbols-outlined">
                             search
                         </span>
-                        <span id="cancel_search_button_1" class="material-symbols-outlined">
+                        <span class="cancel_search_button material-symbols-outlined" onclick="cancel_search();" id="cancel_search_button_1" >
                         close
                         </span>
                        </div>
                     </div>
                 </div>
                 <div id="list_container2" >
-                    
+
                 </div>
                 <div class="footer" id="footer">
                     <div class="filter_container">
@@ -75,7 +85,7 @@
                             <span id="search_button_2" class="material-symbols-outlined">
                                 search
                             </span>
-                            <span id="cancel_search_button_2" class="material-symbols-outlined">
+                            <span class="cancel_search_button material-symbols-outlined"  onclick="cancel_search();" id="cancel_search_button_2" >
                             close
                             </span>
                         </div>
@@ -86,28 +96,51 @@
                             <span id="search_button_3" class="material-symbols-outlined">
                                 search
                             </span>
-                            <span id="cancel_search_button_3" class="material-symbols-outlined">
+                            <span class="cancel_search_button material-symbols-outlined"  onclick="cancel_search();" id="cancel_search_button_3" >
                             close
                             </span>
                         </div>
                     </div>
-                    <div class="filter_container" id="sort_container"  style="margin-bottom: 0px;">
-                        <input type="text" placeholder="Sort by" id="search_input_4" onclick="sort_container_click();">
+
+                    <div class="filter_container">
+                        <input type="text" placeholder="Filter by Tags" id="search_input_5">
                         <div>
-                            <span id="search_button_4" class="material-symbols-outlined">
-                            search
+                            <span id="search_button_5" class="material-symbols-outlined">
+                                search
                             </span>
-                            <span id="cancel_search_button_4" class="material-symbols-outlined">
+                            <span class="cancel_search_button material-symbols-outlined"  onclick="cancel_search();" id="cancel_search_button_5" >
                             close
                             </span>
                         </div>
                     </div>
-                    <div id="sort_list">
-                        <p class="sort_item" onclick="sortByDuedate();">Duedate</p>
-                        <p class="sort_item" onclick="sortByPriority();">Priority</p>
+
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <div class="filter_container" id="sort_container"  style="margin-bottom: 0px;">
+                            <input type="text" placeholder="Sort by" id="search_input_4" onclick="sort_container_click();">
+                            <div>
+                                <span id="search_button_4" class="material-symbols-outlined">
+                                search
+                                </span>
+                                <span class="cancel_search_button material-symbols-outlined" id="cancel_search_button_4" >
+                                close
+                                </span>
+                            </div>
+                        </div>
+                        <div id="sort_list">
+                            <p class="sort_item" onclick="sortByDuedate();">Duedate</p>
+                            <p class="sort_item" onclick="sortByPriority();">Priority</p>
+                        </div>
                     </div>
+                    <button class="view_button" onclick="viewBacklogs();">View Missed tasks</button>
+                    <button class="view_button"onclick="viewAll();">View All</button>
+                    <button class="view_button" id="view_activity_logs" >View Activity Logs</button>
+
+                    
                 </div>
             </div>
+        </div>
+        <div id="activity_log_container">
+
         </div>
     </div>
     
