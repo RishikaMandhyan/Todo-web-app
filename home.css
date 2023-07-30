@@ -182,18 +182,18 @@ p{
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-top: 15px;
+    margin-top: 10px;
     height: 36px;
     
 }
 
 .complete_button, .delete_button, .save_button, .edit_button{
 
-    margin: 5px;
+    margin: 5px 0px 5px;
     width: 32px;
     height: 30px;
     font-size: 14px;
-    padding: 5px;
+    padding: 5px 0px 5px 10px;
     text-decoration: none;
     align-self: center;
     background-color: transparent;
@@ -228,8 +228,8 @@ p{
     border-radius: 10px;
     box-shadow: 0 5px 5px rgba(169,188,218,.65);
     display: flex;
-    flex-direction: column;
-    /* align-items: center; */
+    flex-direction: row;
+    justify-content: space-between;
     
 }
 
@@ -241,7 +241,7 @@ p{
     border-radius: 10px;
     box-shadow: 0 5px 5px rgba(169,188,218,.65);
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     /* align-items: center; */
 }
 

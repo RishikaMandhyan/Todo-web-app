@@ -76,16 +76,28 @@ function render_list(x)
       {
         var para=document.createElement("p");
         var date_para=document.createElement("p");
+        date_para.style.fontSize="16px";
         var subtask_div=document.createElement("div");
         var tag_div=document.createElement("div");
+        tag_div.style.textAlign="right";
 
         var category_div=document.createElement("div");
+        category_div.style.textAlign="right";
+        category_div.style.fontSize="16px";
         var button_container=document.createElement("div");
         var delete_button=document.createElement("button");
         var edit_button=document.createElement("button");
         var save_button=document.createElement("button");
         var complete_button=document.createElement("button");
         var new_div=document.createElement("div");
+        var left_div=document.createElement("div");
+        left_div.setAttribute("id", left_div);
+        left_div.style.marginRight="15px";
+        left_div.style.maxWidth="65%";
+        var right_div=document.createElement("div");
+        right_div.setAttribute("id", right_div);
+
+
 
         para.innerText=item.title;
         para.setAttribute("id", "p"+item.id);
@@ -178,6 +190,8 @@ function render_list(x)
           {
             date_para.innerText="Due on "+ item_date;
           }
+
+         
         }
 
        
@@ -199,8 +213,9 @@ function render_list(x)
             t_para.innerText+=t_item.title+", ";
             t_para.setAttribute("id", t_item.t_id);
         })
-        tag_div.appendChild(t_para);
+        if(t_para.innerText!="Tags: ") tag_div.appendChild(t_para);
 
+        
         item.category_arr.map(function(c_item)
         {
             var c_para=document.createElement("p");
@@ -218,16 +233,20 @@ function render_list(x)
         dragItem(new_div);
         new_div.setAttribute("id", "d"+item.id);
         new_div.classList.add("dragItem");
-        new_div.appendChild(para);
-        new_div.appendChild(category_div);
-        new_div.appendChild(tag_div);
-        new_div.appendChild(date_para);
-        new_div.appendChild(subtask_div);
+        left_div.appendChild(para);
+        right_div.appendChild(category_div);
+        right_div.appendChild(tag_div);
+        left_div.appendChild(date_para);
+        left_div.appendChild(subtask_div);
         button_container.appendChild(delete_button);
         button_container.appendChild(edit_button);
         button_container.appendChild(save_button);
         button_container.appendChild(complete_button);
-        new_div.appendChild(button_container);
+        right_div.appendChild(button_container);
+
+        new_div.appendChild(left_div);
+        new_div.appendChild(right_div);
+       
         list_container.appendChild(new_div);
       }
     });
