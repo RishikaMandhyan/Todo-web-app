@@ -14,6 +14,9 @@ This todo web application has the following features:
 11. Sorting by Priority level
 12. View Missed tasks
 13. Drag/drop of tasks
+14. Date auto complete: worls for the following combinations: "by today", "by tmrw", "by tomorrow", "by 12th Jan 2000"
+15. Reminders: sends one reminder per task, 1 hr before its deadline
+16. View Activity logs
 
 
 Remarks: For search and filter features, if user enters a group of keywords seperated by spaces, the app displays all tasks that include one or more of the keywords as a substring.
