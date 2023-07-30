@@ -559,6 +559,7 @@ submit_button.addEventListener("click", function(){
             display: true,
             priority: priority,
             duedate: new Date(duedate),
+            reminderGiven:false,
             subtask_arr: [...subtask_arr],
             category_arr: [...category_arr],
             tag_arr: [...tag_arr]
@@ -1079,3 +1080,19 @@ function removeActivityLogs()
   this.removeEventListener("click",removeActivityLogs);
   this.addEventListener("click",viewActivityLogs);
 }
+
+
+function reminder()
+{
+  var now_date= new Date();
+  todo_list.map(function(item){
+    var item_date= new Date(item.duedate);
+     if(item_date.getTime()- now_date.getTime() < 3600000 && item_date.getTime()- now_date.getTime() >0  && !item.reminderGiven){
+      alert("Reminder for Task= "+ item.title+ ". Due at "+ item.duedate);
+      item.reminderGiven=true;
+      localStorage.setItem('todos', JSON.stringify(todo_list));       
+    }
+  })
+}
+
+setInterval(reminder(), 9000);
