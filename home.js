@@ -187,7 +187,7 @@ function render_list(x)
             s_para.innerText=s_item.title;
             s_para.setAttribute("id", s_item.s_id);
             subtask_div.appendChild(s_para);
-            dragSubtask(s_para);
+            //dragSubtask(s_para);
             s_para.classList.add("dragSubtask");
 
         })
@@ -269,6 +269,29 @@ function dragEnd(){
   // localStorage.setItem("sessions", JSON.stringify(session_arr));
 }
 
+function dragOver(e){
+   
+  e.preventDefault();
+  const containerRect = list_container.getBoundingClientRect();
+  const offsetY = e.clientY - containerRect.top;
+  const containerHeight = containerRect.height;
+  const scrollThreshold = 20; 
+  const scrollSpeed = 100; 
+  if (offsetY < scrollThreshold) 
+  {
+    list_container.scrollTop -= scrollSpeed;
+  } else if (offsetY > containerHeight - scrollThreshold) 
+  {
+    list_container.scrollTop += scrollSpeed;
+  }
+}
+
+function findAncestorWithClass(element, className) 
+{
+while ((element = element.parentElement) && !element.classList.contains(className));
+return element;
+}
+
 
 function dragDrop(e)
 {
@@ -295,7 +318,7 @@ function dragDrop(e)
       parentDiv=e.target;
     }
     else parentDiv=findAncestorWithClass(e.target, "dragItem");
-    //console.log(parentDiv);
+    console.log(parentDiv);
     if(parentDiv)
     {
       // session_arr[session_id].activity_arr.push("User dropped task "+todo_list[fromIndex].title+" after task "+todo_list[dropIndex-1].title+" at "+ new Date());
@@ -303,11 +326,10 @@ function dragDrop(e)
       var removed= todo_list.splice(fromIndex,1);
       if(fromIndex < dropIndex) dropIndex--;
       todo_list.splice(dropIndex, 0, removed[0]);
-      //console.log(todo_list);
+      console.log(todo_list);
       localStorage.setItem('todos', JSON.stringify(todo_list));  
       render_list(todo_list);
    }
-  
     
 }
 
@@ -370,28 +392,7 @@ function dragDrop(e)
 // }
 
 
-function dragOver(e){
-   
-    e.preventDefault();
-    const containerRect = list_container.getBoundingClientRect();
-    const offsetY = e.clientY - containerRect.top;
-    const containerHeight = containerRect.height;
-    const scrollThreshold = 20; 
-    const scrollSpeed = 100; 
-    if (offsetY < scrollThreshold) 
-    {
-      list_container.scrollTop -= scrollSpeed;
-    } else if (offsetY > containerHeight - scrollThreshold) 
-    {
-      list_container.scrollTop += scrollSpeed;
-    }
-}
 
-function findAncestorWithClass(element, className) 
-{
-  while ((element = element.parentElement) && !element.classList.contains(className));
-  return element;
-}
 
 // function dragDrop_st(e)
 // {
