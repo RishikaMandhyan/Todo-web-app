@@ -25,6 +25,11 @@ Remarks: For search and filter features, if user enters a group of keywords sepe
 
 Database Schema at https://docs.google.com/spreadsheets/d/1irLc3E79O_qs8oPkmjk3yXNx1qPBcKnZ17Vgs8NFcFY/edit?usp=sharing
 
+<img width="800" alt="Screenshot 2023-11-03 at 4 43 35 PM" src="https://github.com/RishikaMandhyan/Todo-web-app/assets/54908793/a2542aab-4e48-48c4-9035-292bedda74f1">
+
+
+
+
 
 
 
