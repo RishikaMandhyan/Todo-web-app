@@ -1,5 +1,7 @@
 # Todo-web-app
 
+Visit here: https://rishikamandhyan.github.io/Todo-web-app/
+
 This todo web application has the following features:
 1. Basic add/delete/update todos
 2. Marking todos as done/undone
@@ -19,9 +21,7 @@ This todo web application has the following features:
 16. View Activity logs
 
 
-Remarks: For search and filter features, if user enters a group of keywords seperated by spaces, the app displays all tasks that include one or more of the keywords as a substring.
-
-Inorder to run the application on local machine, git clone the repository from the link provided on the Cogoport platform and then connect to live server after opening it in VS code. 
+Remarks: For search and filter features, if user enters a group of keywords seperated by spaces, the app displays all tasks that include one or more of the keywords as a substring. 
 
 Database Schema at https://docs.google.com/spreadsheets/d/1irLc3E79O_qs8oPkmjk3yXNx1qPBcKnZ17Vgs8NFcFY/edit?usp=sharing
 
